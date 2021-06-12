@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Index page{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h1>Hello, {{login}} </h1>
+
+<h3>For terminate your session click there:</h3>
+
+<form action="/logout"> <br>
+  <input type="submit" value="Meow!">
+</form>
+
+
+
+
+{% endblock %}

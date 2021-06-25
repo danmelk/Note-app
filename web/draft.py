@@ -23,6 +23,28 @@
 #     session.pop('login', None)
 #     return redirect(url_for('login'))
 
+    # if request.method == 'POST':
+    #     if 'username' in session:
+    #         return redirect(url_for('views.home'))
+    #     else:
+    #         username = request.form['username']
+    #         session['username'] = username
+    #         return render_template('login.html')
+    #     return redirect(url_for('views.home'))
+    # else:
+    #     # if 'username' in session:
+    #     #     return redirect(url_for('views.home'))
+    #     return render_template('login.html')
+
+
+
+    # if request.method == 'POST':
+    #     username = request.form['username']
+    #     session['username'] = username
+    #     return redirect(url_for('views.home'))
+    # else:
+    #     return render_template('login.html')
+
 
 
 

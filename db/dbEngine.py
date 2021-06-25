@@ -1,10 +1,10 @@
 import psycopg2
-from config import config
+from config import configFunction
 
 def connect():
     conn = None
     try:
-        params = config()
+        params = configFunction()
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
 

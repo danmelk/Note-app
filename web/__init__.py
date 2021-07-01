@@ -9,6 +9,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your secret key ;)'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dan:dan_melk_postgres@localhost/webexam'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     from .views import views
     from .auth import auth

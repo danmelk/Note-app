@@ -1,5 +1,8 @@
+from logging import log
 from re import L
+from . import db
 import re
+from web.models import User
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from flask.helpers import flash
 from werkzeug.datastructures import cache_property
@@ -32,11 +35,15 @@ def sign_up():
         login_data = request.form.get('login')
         password_data = request.form.get('password')
         if len(name_data) < 2:
-            flash('please enter your full real name :)', category='error')
+            flash('please enter your real name :)', category='error')
         elif len(login_data) < 4:
             flash('your login must be greater then 3 characters', category='error')
         elif len(password_data) < 6:
             flash('your password must be greater then 5 characters', category='error')
         else:
-            flash('Account created successfully', category='success')
+            new_user = User(name = name_data, login = login_data, password = password_data)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Account created successfully, follow to login page to login', category='success')
+            return(redirect(url_for('auth.login')))
     return render_template('sign_up.html')

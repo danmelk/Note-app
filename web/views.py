@@ -17,5 +17,3 @@ def home():
         flash('Please login first ', category='error')
 
         return redirect(url_for('auth.login'))
-
-

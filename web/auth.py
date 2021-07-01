@@ -22,7 +22,7 @@ def logout():
         flash('You are logged out!', category='success')
         return redirect(url_for('auth.login'))
     else:
-        flash('You are not logged in >:(', category='error')
+        flash('You are not logged in', category='error')
         return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods=['POST', 'GET'])

@@ -21,11 +21,11 @@ def login():
         if valid_user:
             if valid_user.password == user_password:
                 flash('Logged in successfully!', category='success')
+                login_user(valid_user, remember=True)
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
                 return redirect(url_for('auth.login'))
-
         else:
             flash('Login does not exist.', category='error')
             return redirect(url_for('auth.login'))
@@ -33,9 +33,11 @@ def login():
         return render_template('login.html')
 
 @auth.route('/logout')
+@login_required
 def logout():
     if 'username' in session:
         session.pop('username')
+        logout_user()
         flash('You are logged out!', category='success')
         return redirect(url_for('auth.login'))
     else:

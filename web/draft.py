@@ -49,3 +49,9 @@
 
 
 
+
+# <ul> class="list-group list-group-flush" id='notes'
+#   {% for note in user.notes %} 
+#   {{ note.data }}
+#   {% endfor %}
+# </ul> 

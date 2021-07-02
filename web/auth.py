@@ -14,7 +14,20 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         session['username'] = username
-        return redirect(url_for('views.home'))
+        user_login = request.form.get('username')
+        user_password = request.form.get('password')
+        valid_user = User.query.filter_by(login = user_login).first()
+        if valid_user:
+            if valid_user.password == user_password:
+                flash('Logged in successfully!', category='success')
+                return redirect(url_for('views.home'))
+            else:
+                flash('Incorrect password, try again.', category='error')
+                return redirect(url_for('auth.login'))
+
+        else:
+            flash('Login does not exist.', category='error')
+            return redirect(url_for('auth.login'))
     else:
         return render_template('login.html')
 
@@ -34,7 +47,11 @@ def sign_up():
         name_data = request.form.get('name')
         login_data = request.form.get('login')
         password_data = request.form.get('password')
-        if len(name_data) < 2:
+
+        user = User.query.filter_by(login=login_data).first()
+        if user:
+            flash('Login already exists.', category='error')
+        elif len(name_data) < 2:
             flash('please enter your real name :)', category='error')
         elif len(login_data) < 4:
             flash('your login must be greater then 3 characters', category='error')

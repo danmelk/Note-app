@@ -6,6 +6,7 @@ from web.models import User
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from flask.helpers import flash
 from werkzeug.datastructures import cache_property
+from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 

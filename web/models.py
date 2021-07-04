@@ -2,16 +2,18 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-class Tag():
-    pass
+# class Tag(db.Model):
+#     tag_name = db.Column(db.String(100), primary_key = True)
+#     note_relation = db.relationship('Note')
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(100))
+    title = db.Column(db.String(100), unique = True)
     data = db.Column(db.String(5000))
-    tag = db.Column(db.String(100))
+    tag = db.Column(db.String(100), unique = True)
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # tag_name = db.Column(db.String(100), db.ForeignKey('tag.tag_name'))
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)

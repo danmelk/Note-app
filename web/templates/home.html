@@ -6,22 +6,31 @@
 
 {% block content %}
 
-<h1 align="center">Notes</h1>
-<ul class="list-group list-group-flush" id="notes">
-  {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </li>
+<h1>Posts</h1>
+{% for note in current_user.notes %}
+<li class="list-group-item">
+<a href="/posts/{{note.title}}">{{note.title}}</a> Tag: {{ note.tag }}
+</li>
   {% endfor %}
 </ul>
 <form method="POST">
+  <label for="title">Your title for current post: </label>
+  <input name="title" id="title">
+
   <textarea name="note" id="note" class="form-control"></textarea>
+  <label for="tag">Your tag for current post: </label>
+  <input name="tag" id="tag">
+  <br />
+
+  <!-- {% for entry in users_login %}
+<li class="list-group-item">
+  {{ entry.name }}
+</li>
+  {% endfor %} -->
+
   <br />
   <div align="center">
-    <button type="submit" class="btn btn-primary">Add Note</button>
+    <button type="submit" class="btn btn-primary">Add Post</button>
   </div>
 </form>
 

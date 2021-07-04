@@ -50,12 +50,9 @@ def home():
 
 @views.route('/posts/<name>', methods=['POST', 'GET'])
 def post(name):
-    post_title = Note.query.filter_by(title = name).first()
-    post_data = Note.query.filter_by
-    
+    article = Note.query.filter_by(title = name).first()    
     return render_template('post.html', 
-    post_title = post_title,
-    post_data = post_data)
+    article = article)
 
 # @views.route('/laboratory/<int:id>', methods=['POST', 'GET'])
 # def laboratory(id):

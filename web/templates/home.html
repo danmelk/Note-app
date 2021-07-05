@@ -7,12 +7,13 @@
 {% block content %}
 
 <h1>Posts</h1>
-{% for note in current_user.notes %}
+{% for entry in users_login %}
+{% for title in entry.notes %}
 <li class="list-group-item">
-<a href="/posts/{{note.title}}">{{note.title}}</a> Tag: {{ note.tag }}
+  <a href="/posts/{{ title.title }}">{{title.title}}</a> Written by {{ entry.login }}
 </li>
-  {% endfor %}
-</ul>
+{% endfor %}  {% endfor %} <br>
+
 <form method="POST">
   <label for="title">Your title for current post: </label>
   <input name="title" id="title">
@@ -22,11 +23,14 @@
   <input name="tag" id="tag">
   <br />
 
+
   <!-- {% for entry in users_login %}
-<li class="list-group-item">
-  {{ entry.name }}
-</li>
-  {% endfor %} -->
+    {% for title in entry.notes %}
+    <li class="list-group-item">
+      <a href="/posts/{{ title.title }}">{{title.title}}</a> Written by {{ entry.login }}
+    </li>
+  {% endfor %}  {% endfor %} -->
+
 
   <br />
   <div align="center">

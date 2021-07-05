@@ -12,7 +12,7 @@ class Note(db.Model):
     data = db.Column(db.String(5000))
     tag = db.Column(db.String(100), unique = True)
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_login = db.Column(db.String, db.ForeignKey('user.login'))
     # tag_name = db.Column(db.String(100), db.ForeignKey('tag.tag_name'))
 
 class User(db.Model, UserMixin):

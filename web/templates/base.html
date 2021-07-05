@@ -37,6 +37,7 @@
         <a class="navbar-brand" href="{{ url_for('auth.logout')}}">Logout</a>
         <a class="navbar-brand" href="{{ url_for('views.home')}}">Home page</a>
         {% else %}
+        <a class="navbar-brand" href="{{ url_for('views.home')}}">Home page</a>
         <a class="navbar-brand" href="{{ url_for('auth.sign_up')}}">Sign-up</a>
         <a class="navbar-brand" href="{{ url_for('auth.login')}}">Login</a>
         {% endif %}

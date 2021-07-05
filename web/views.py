@@ -15,12 +15,13 @@ from .models import Note, User
 views = Blueprint('views', __name__)
 
 @views.route('/home', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def home():
+    users_login = User.query.order_by(User.login).all()
     if request.method == "POST":
         if 'username' in session:
             # username = session['username']
-            users_login = User.query.order_by(User.login).all()
+            
             note_title = request.form.get('title')
             note_data = request.form.get('note')
             note_tag = request.form.get('tag')

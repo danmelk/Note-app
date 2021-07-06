@@ -38,8 +38,8 @@ def home():
                 db.session.commit()
 
             else:
-                
-                flash('Secure file is not passed', category='error')
+
+                flash('Picture does not attached ', category='error')
 
             valid_title = Note.query.filter_by(title = note_title).first()
             valid_tag = Note.query.filter_by(tag = note_tag).first()

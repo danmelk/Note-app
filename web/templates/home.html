@@ -4,7 +4,10 @@
   <h1>{% block title %}Home page{% endblock %}</h1>
 {% endblock %}
 {% block content %}
+{% if current_user.is_authenticated %}
  <h4>Welcome back, {{ current_user.name }}</h4>
+ {% else %}
+ {% endif %}
 <h1>Posts</h1>
 {% for entry in users_login %}
 {% for title in entry.notes %}

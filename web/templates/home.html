@@ -3,41 +3,35 @@
 {% block header %}
   <h1>{% block title %}Home page{% endblock %}</h1>
 {% endblock %}
-
 {% block content %}
-
 <h1>Posts</h1>
 {% for entry in users_login %}
 {% for title in entry.notes %}
+
 <li class="list-group-item">
-  <a href="/posts/{{ title.title }}">{{title.title}}</a> Written by {{ entry.login }}
+  <a href="/posts/{{ title.title }}">{{ title.title }}</a> Written by {{ entry.login }}
 </li>
-{% endfor %}  {% endfor %} <br>
-
-
+{% endfor %} {% endfor %} <br>
 {% if current_user.is_authenticated %}
-
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
   <label for="title">Your title for current post: </label>
   <input name="title" id="title">
 
-  <textarea name="note" id="note" class="form-control"></textarea>
   <label for="tag">Your tag for current post: </label>
   <input name="tag" id="tag">
+
+  <textarea name="note" id="note" class="form-control"></textarea> <br>
+
+  <input type="file" id="picture" name="picture"> <br>
+  <!-- <input type="submit"> -->
+
+
   <br />
-  <!-- {% for entry in users_login %}
-    {% for title in entry.notes %}
-    <li class="list-group-item">
-      <a href="/posts/{{ title.title }}">{{title.title}}</a> Written by {{ entry.login }}
-    </li>
-  {% endfor %}  {% endfor %} -->
+
   <div align="center">
     <button type="submit" class="btn btn-primary">Add Post</button>
   </div>
 </form>
 {% else %}
-
 {% endif %}
-
-
 {% endblock %}

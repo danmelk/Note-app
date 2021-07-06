@@ -6,6 +6,12 @@ from sqlalchemy.sql import func
 #     tag_name = db.Column(db.String(100), primary_key = True)
 #     note_relation = db.relationship('Note')
 
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    img = db.Column(db.LargeBinary, unique=True, nullable=False)
+    name = db.Column(db.Text, nullable=False)
+    mimetype = db.Column(db.Text, nullable=False)
+
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(100), unique = True)

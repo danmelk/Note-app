@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h3>{{ user_login.name }}'s note</h3>
+
+{% for note in user_login.notes %}
+
+<li class="list-group-item">
+    <a href="/post/{{ note.title }}">{{ note.title }}</a> Written by 
+    <a href="/user/{{ user_login.login }}">{{ user_login.login }}</a>
+</li>
+{% endfor %}
+{% endblock %}

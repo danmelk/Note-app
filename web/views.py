@@ -67,37 +67,16 @@ def home():
     current_user = current_user)
 
 
-@views.route('/posts/<name>', methods=['POST', 'GET'])
+@views.route('/post/<name>', methods=['POST', 'GET'])
 def post(name):
     article = Note.query.filter_by(title = name).first()    
     return render_template('post.html', 
     article = article)
 
-# @views.route('/image', methods=['POST'])
-# def upload():
-#     pic = request.files['pic']
-#     filename = secure_filename(pic.filename)
-#     mimetype = pic.mimetype
-#     img = Image(img=pic.read(), name=filename, mimetype=mimetype)
-#     db.session.add(img)
-#     db.session.commit()
-#     return 'pic has been uploaded'
-
-
-# @views.route('/image/<int:id>')
-# def get_img(id):
-#     img = Image.query.filter_by(id=id).first()
-#     return Response(img.img, mimetype=img.mimetype)
-
-
-# @views.route('/delete-note', methods=['POST'])
-# def delete_note():
-#     note = json.loads(request.data)
-#     noteId = note['noteId']
-#     note = Note.query.get(noteId)
-#     if note:
-#         if note.user_id == current_user.id:
-#             db.session.delete(note)
-#             db.session.commit()
-
-#     return jsonify({})
+@views.route('/user/<login>', methods=['POST', 'GET'])
+def user_page(login):
+    user_login = User.query.filter_by(login = login).first()
+    
+ 
+    return render_template('user_page.html', 
+    user_login = user_login)

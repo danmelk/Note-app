@@ -13,7 +13,8 @@
 {% for title in entry.notes %}
 
 <li class="list-group-item">
-  <a href="/posts/{{ title.title }}">{{ title.title }}</a> Written by {{ entry.login }}
+  <a href="/post/{{ title.title }}">{{ title.title }}</a> Written by 
+  <a href="/user/{{ entry.login }}">{{ entry.login }}</a>
 </li>
 {% endfor %} {% endfor %} <br>
 {% if current_user.is_authenticated %}

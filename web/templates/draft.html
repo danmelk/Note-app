@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% if current_user.login == draft_author.login %}
+
+<h3>{{ draft_author.login }}'s drafts </h3>
+
+{% for draft in draft_author.drafts %}
+
+<li class="list-group-item">
+    {{ draft.title }}
+</li>
+
+{% endfor %}
+{% else %}
+{% endif %}
+
+
+
+{% endblock %}

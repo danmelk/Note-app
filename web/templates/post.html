@@ -4,9 +4,20 @@
 {% block content %}
 
 
-<h1>{{ article.title }}<br></h1> 
+<h2>{{ article.title }}</h2> <br>
+
+{% if current_user.login == article.user_login %}
+
+<form method="POST">
+    <button type="submit" formaction='/delete_note' class="btn btn-primary">Delete note</button> 
+    <button type="submit" formaction='/update_note' class="btn btn-primary">Edit note</button> 
+</form>
+
+{% else %}
+
+{% endif %}
 
 
-<h3>{{ article.data }}</h3>
+<h4>{{ article.data }}</h4>
 
 {% endblock %}

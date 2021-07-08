@@ -6,6 +6,14 @@ from sqlalchemy.sql import func
 #     tag_name = db.Column(db.String(100), primary_key = True)
 #     note_relation = db.relationship('Note')
 
+class Draft(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(100), unique = True)
+    data = db.Column(db.String(5000))
+    tag = db.Column(db.String(100), unique = True)
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    user_login = db.Column(db.String, db.ForeignKey('user.login'))
+
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     img = db.Column(db.LargeBinary, unique=True, nullable=False)
@@ -18,6 +26,7 @@ class Note(db.Model):
     data = db.Column(db.String(5000))
     tag = db.Column(db.String(100), unique = True)
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    # draft = db.Column(db.String(5000))
     user_login = db.Column(db.String, db.ForeignKey('user.login'))
     # tag_name = db.Column(db.String(100), db.ForeignKey('tag.tag_name'))
 
@@ -27,3 +36,4 @@ class User(db.Model, UserMixin):
     login = db.Column(db.String(50), unique = True)
     password = db.Column(db.String(50))
     notes = db.relationship('Note')
+    drafts = db.relationship('Draft')

@@ -13,7 +13,7 @@
 {% for title in user.notes %}
 
 <li class="list-group-item">
-  <a href="/post/{{ title.title }}">{{ title.title }}</a> Written by 
+  <a href="/home/{{ title.title }}">{{ title.title }}</a> Written by 
   <a href="/user/{{ user.login }}">{{ user.login }}</a>
 </li>
 {% endfor %} {% endfor %} <br>
@@ -23,8 +23,8 @@
   <label for="title">Your title for current post: </label>
   <input name="title" id="title">
 
-  <label for="tag">Your tag for current post: </label>
-  <input name="tag" id="tag">
+  <!-- <label for="tag">Your tag for current post: </label>
+  <input name="tag" id="tag"> -->
 
   <textarea name="note" id="note" class="form-control"></textarea> <br>
 

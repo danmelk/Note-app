@@ -2,9 +2,6 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-# class Tag(db.Model):
-#     tag_name = db.Column(db.String(100), primary_key = True)
-#     note_relation = db.relationship('Note')
 
 class Draft(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -26,9 +23,7 @@ class Note(db.Model):
     data = db.Column(db.String(5000))
     tag = db.Column(db.String(100), unique = True)
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    # draft = db.Column(db.String(5000))
     user_login = db.Column(db.String, db.ForeignKey('user.login'))
-    # tag_name = db.Column(db.String(100), db.ForeignKey('tag.tag_name'))
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)

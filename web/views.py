@@ -1,10 +1,11 @@
 from logging import log
-from operator import irshift, pos
+from operator import attrgetter, irshift, pos
 import json
 import re
 from types import MethodDescriptorType
 
 from sqlalchemy import util
+from sqlalchemy.orm import undefer
 from web.auth import login
 from . import db
 from flask_login.utils import login_required
@@ -15,6 +16,7 @@ from flask.helpers import url_for
 from werkzeug.utils import redirect, secure_filename
 from flask_login import login_required, current_user
 from .models import Note, User, Image, Draft
+import web
 
 views = Blueprint('views', __name__)
 home_bp = Blueprint('home_bp', __name__)
@@ -23,6 +25,7 @@ home_bp = Blueprint('home_bp', __name__)
 # @login_required
 def home():
     users_login = User.query.order_by(User.login).all()
+    tag_list = Note.query.order_by(Note.tag).all()
     if request.method == "POST":
         if 'username' in session:
             # username = session['username']
@@ -42,11 +45,8 @@ def home():
                 db.session.commit()
 
             valid_title = Note.query.filter_by(title = note_title).first()
-            valid_tag = Note.query.filter_by(tag = note_tag).first()
             if valid_title:
                 flash('Wrong title', category='error')
-            elif valid_tag:
-                flash('Wrong tag', category='error')
             elif len(note_data) < 1:
                 flash('Write something!', category='error')
             else:
@@ -64,6 +64,7 @@ def home():
             return redirect(url_for('auth.login'))
 
     return render_template('home.html',
+    tag_list = tag_list,
     users_login = users_login,
     current_user = current_user)
 
@@ -115,14 +116,14 @@ def user_draft(login):
     draft_author = draft_author,
     current_user = current_user)
 
-@views.route('/delete_note', methods=['POST', 'GET'])
+@views.route('/delete_note/<id>', methods=['POST', 'GET'])
 @login_required
-def delete_note():
+def delete_note(id):
     # user = User.query.filter_by(login = current_user.login).first()
-    note = Note.query.filter_by(user_login = current_user.login).first()
-    if note:
-        if note.user_login == current_user.login:
-            db.session.delete(note)
+    note_id = Note.query.filter_by(id = id).first()
+    if note_id:
+        if note_id.user_login == current_user.login:
+            db.session.delete(note_id)
             db.session.commit()
             return redirect(url_for('views.home'))
         else: 
@@ -132,15 +133,37 @@ def delete_note():
         flash('you are not author of this note', category='error')
         return redirect(url_for('views.home'))
 
-@views.route('/update_note', methods=['POST', 'GET'])
+@views.route('/update_note/<int:id>', methods=['POST', 'GET'])
 @login_required
-def update_note():
-    note_author = Note.query.filter_by(user_login = current_user.login).first()
-    if note_author:
-        if note_author.user_login == current_user.login:
-            return 'this page is coming soon'
+def update_note(id):
+    note_id = Note.query.filter_by(id = id).first()
+    if note_id:
+        if note_id.user_login == current_user.login:
+            filter_by_id = Note.query.filter_by(id = note_id.id).first()
+            unedited_note = filter_by_id.data
+            edited_note = request.form.get('upd_note')
+            unedited_note = edited_note
+
+            if unedited_note == None:
+                return render_template('updated_post.html', 
+                unedited_note = unedited_note, 
+                edited_note = edited_note,
+                article = article, 
+                filter_by_id = filter_by_id)
+
+            else:
+                filter_by_id.data = unedited_note
+                db.session.commit()
+                flash('changes applied', category='success')
+                return render_template('updated_post.html', 
+                unedited_note = unedited_note, 
+                edited_note = edited_note,
+                article = article, 
+                filter_by_id = filter_by_id)
+
+        else:
+            return 'you are not author for doing this!'
     else:
         flash('you are not author of this note', category='error')
         return redirect(url_for('views.home'))
-
 

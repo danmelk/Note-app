@@ -6,8 +6,8 @@
 {% if current_user.login == article.user_login %}
 
 <form method="POST">
-    <button type="submit" formaction='/delete_note' class="btn btn-primary">Delete post</button> 
-    <button type="submit" formaction='/update_note' class="btn btn-primary">Edit post</button> 
+    <button type="submit" formaction='/delete_note/{{ article.id }}' class="btn btn-primary">Delete post</button> 
+    <button type="submit" formaction='/update_note/{{ article.id }}' class="btn btn-primary">Edit post</button> 
 </form> <br>
 
 {% else %}

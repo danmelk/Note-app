@@ -5,11 +5,22 @@
 {% endblock %}
 
 {% block content %}
-  <form method="POST">
+  <!-- <form method="POST">
     <label for="username">Username</label>
     <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input name="password" id="password" required>
+    <label for="inputPassword5" class="form-label">Пароль</label>
+    <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
     <input type="submit" value="Log in">
+  </form> -->
+
+  <form method="POST">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Username</label>
+      <input type="text" name="username" class="form-control" id="exampleInputEmail1">
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+    </div>
+    <button type="submit" class="btn btn-primary">Log in</button>
   </form>
 {% endblock %}

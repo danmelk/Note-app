@@ -4,10 +4,10 @@
 
 
 <form method="POST">
-    <textarea name="upd_note" id="upd_note" class="form-control">{{ article.data }}</textarea> <br>
+    <textarea name="upd_note" id="upd_note" class="form-control">{{ filter_by_id.data }}</textarea> <br>
     <button type="submit" class="btn btn-primary">Apply changes</button> 
 </form>
 
 
 {% else %} {% endif %} 
-{% endblock %}
+{% endblock %} 

@@ -20,28 +20,40 @@
 {% if current_user.is_authenticated %}
 
 <form method="POST" enctype="multipart/form-data">
-  <label for="title">Your title for current post: </label>
-  <input name="title" id="title">
+  <!-- <label for="title">Your title for current post: </label>
+  <input name="title" id="title"> -->
 
   <!-- <label for="tag">Your tag for current post: </label>
   <input name="tag" id="tag"> -->
 
-  <textarea name="note" id="note" class="form-control"></textarea> <br>
+  <!-- <textarea name="note" id="note" class="form-control"></textarea> <br> -->
+
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Head</label>
+    <input type="text" name="title" class="form-control" id="exampleFormControlInput1">
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Body</label>
+    <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="1"></textarea>
+  </div>
 
   <!-- <input type="file" id="picture" name="picture"> <br>
   <input type="submit"> -->
 
+  
+  <!-- <select class="form-select form-select-sm" name="tag" aria-label=".form-select-sm example">
+    {% for tag in tag_list %}
+      <option selected>{{tag.tag}}</option>
+    {% endfor %}
+  </select> -->
+
+  <br>
+  <br>
+
   <button type="submit" class="btn btn-primary">Add Post</button> 
   <button type="submit" formaction='/{{ current_user.login }}/draft' class="btn btn-primary">Save as draft</button> 
-
-
 </form>
-
-<form method="POST">
-
-</form>
-
 
 {% else %}
-{% endif %}
+{% endif %} 
 {% endblock %}

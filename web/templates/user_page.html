@@ -8,7 +8,13 @@
 {% for note in user_login.notes %}
 
 <li class="list-group-item">
-    <a href="/home/{{ note.title }}">{{ note.title }}</a>
+    <a href="/home/{{ note.title }}">{{ note.title }}</a> 
+    {% if current_user.login == note.user_login %}
+    <form method="GET">
+        <button type="submit" formaction='/delete_note/{{ note.id }}' class="btn btn-primary">Delete post</button>
+    </form>
+    {% else %}
+    {% endif %} 
 </li>
 {% endfor %}
 {% endblock %}

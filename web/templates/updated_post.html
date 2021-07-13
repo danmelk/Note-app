@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if current_user.login == article.user_login %}
 
 
 <form method="POST">
@@ -9,5 +8,4 @@
 </form>
 
 
-{% else %} {% endif %} 
 {% endblock %} 

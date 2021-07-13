@@ -116,7 +116,7 @@ def user_draft(login):
     draft_author = draft_author,
     current_user = current_user)
 
-@views.route('/delete_note/<id>', methods=['POST', 'GET'])
+@views.route('/delete_note/<int:id>', methods=['POST', 'GET'])
 @login_required
 def delete_note(id):
     # user = User.query.filter_by(login = current_user.login).first()
@@ -155,11 +155,12 @@ def update_note(id):
                 filter_by_id.data = unedited_note
                 db.session.commit()
                 flash('changes applied', category='success')
-                return render_template('updated_post.html', 
-                unedited_note = unedited_note, 
-                edited_note = edited_note,
-                article = article, 
-                filter_by_id = filter_by_id)
+                return redirect(url_for('views.home'))
+                # return render_template('updated_post.html', 
+                # unedited_note = unedited_note, 
+                # edited_note = edited_note,
+                # article = article, 
+                # filter_by_id = filter_by_id)
 
         else:
             return 'you are not author for doing this!'

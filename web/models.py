@@ -27,7 +27,6 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(100), unique = True)
     data = db.Column(db.String(5000))
-    tag = db.Column(db.String(100))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_login = db.Column(db.String, db.ForeignKey('user.login'))
 

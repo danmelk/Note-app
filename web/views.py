@@ -166,4 +166,3 @@ def update_note(id):
     else:
         flash('you are not author of this note', category='error')
         return redirect(url_for('views.home'))
-

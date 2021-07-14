@@ -18,7 +18,6 @@ def create_app():
     from .views import views, home_bp
     from .auth import auth
 
-
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(home_bp, url_prefix='/home')

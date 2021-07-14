@@ -1,3 +1,4 @@
+from sqlalchemy.orm import relationship
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
@@ -13,9 +14,10 @@ class Draft(db.Model):
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    img = db.Column(db.LargeBinary, unique=True, nullable=False)
+    img = db.Column(db.LargeBinary)
     name = db.Column(db.Text, nullable=False)
     mimetype = db.Column(db.Text, nullable=False)
+    note_image = db.Column(db.String, db.ForeignKey('note.title'))
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -24,6 +26,7 @@ class Note(db.Model):
     tag = db.Column(db.String(100))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_login = db.Column(db.String, db.ForeignKey('user.login'))
+    images = db.relationship('Image')
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)

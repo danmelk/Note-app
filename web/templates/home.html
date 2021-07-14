@@ -36,18 +36,14 @@
     <label for="exampleFormControlTextarea1" class="form-label">Body</label>
     <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="1"></textarea>
   </div>
-
-
-  <!-- <div class="col-md-4">
-    <h2>User created tags</h2>
-    <input type="text" name="tag" id="tag-text-field">
-    <button class="btn-info">go! </button>
+  <!-- <div>
+    <label for="formFileLg" class="form-label">File upload</label>
+    <input class="form-control form-control-lg" name="picture" id="formFileLg" type="file">
   </div> -->
-
-  <!-- <input type="file" id="picture" name="picture"> <br>
-  <input type="submit"> -->
-
-  
+  <div class="mb-3">
+    <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+    <input class="form-control" name="picture" type="file" id="formFileMultiple" multiple>
+  </div>
   <!-- <select class="form-select form-select-sm" name="tag" aria-label=".form-select-sm example">
     {% for tag in tag_list %}
       <option selected>{{tag.tag}}</option>

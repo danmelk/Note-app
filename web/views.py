@@ -1,11 +1,13 @@
 from logging import log
-from operator import attrgetter, irshift, pos
+from operator import attrgetter, imatmul, irshift, pos
 import json
 import re
 from types import MethodDescriptorType
+from flask.wrappers import Response
 
 from sqlalchemy import util
 from sqlalchemy.orm import undefer
+from sqlalchemy.sql.expression import all_
 from web.auth import login
 from . import db
 from flask_login.utils import login_required
@@ -32,17 +34,7 @@ def home():
             note_title = request.form.get('title')
             note_data = request.form.get('note')
             note_tag = request.form.get('tag')
-            picture = request.files.get('picture')
-            if picture:
-                filename  = secure_filename(picture.filename)
-                mimetype = picture.mimetype
-                note_image = Image(
-                img = picture.read(),
-                mimetype = mimetype,
-                name = filename)
-
-                db.session.add(note_image)
-                db.session.commit()
+            picture = request.files.getlist('picture')
 
             valid_title = Note.query.filter_by(title = note_title).first()
             if valid_title:
@@ -51,13 +43,26 @@ def home():
                 flash('Write something!', category='error')
             else:
                 note_entrance = Note(
-                    title =  note_title,
-                    data = note_data, 
-                    user_login = current_user.login, 
-                    tag = note_tag)
+                title =  note_title,
+                data = note_data, 
+                user_login = current_user.login, 
+                tag = note_tag)
 
                 db.session.add(note_entrance)
                 db.session.commit()
+
+                if picture:
+                    for each_picture in picture:
+                        filename = secure_filename(each_picture.filename)
+                        mimetype = each_picture.mimetype
+                        note_image = Image(
+                        img = each_picture.read(),
+                        mimetype = mimetype,
+                        note_image = note_title,
+                        name = filename)
+
+                        db.session.add(note_image)
+                        db.session.commit()
 
         else:
             flash('Please login first ', category='error')
@@ -68,13 +73,21 @@ def home():
     users_login = users_login,
     current_user = current_user)
 
+@views.route('/home/image/<name>')
+def get_image(name):
+    image = Image.query.filter_by(name = name).first()
+    return Response (image.img, mimetype=image.mimetype)
 
 @views.route('/home/<post>', methods=['POST', 'GET'])
 def post(post):
     global article
-    article = Note.query.filter_by(title = post).first()    
+    article = Note.query.filter_by(title = post).first()  
+    # all_images = Image.query.order_by(Image.id).all()
+    image = Image.query.filter_by(note_image = post).all()
     if article:
         return render_template('post.html', 
+        # all_images = all_images,
+        image = image,
         article = article)
     else:
         return 'this post does not exists'

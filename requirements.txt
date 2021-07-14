@@ -5,3 +5,4 @@ gunicorn
 psycopg2
 flask_sqlalchemy
 flask_login
+pytest

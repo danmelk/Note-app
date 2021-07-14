@@ -90,7 +90,7 @@ def post(post):
         image = image,
         article = article)
     else:
-        return 'this post does not exists'
+        return 'this post does not exists... maybe... maybe it is just an another bug'
 
 @views.route('/user/<login>', methods=['POST', 'GET'])
 def user_page(login):

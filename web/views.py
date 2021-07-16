@@ -4,36 +4,45 @@ import json
 import re
 from types import MethodDescriptorType
 from flask.wrappers import Response
-
+import imghdr
 from sqlalchemy import util
 from sqlalchemy.orm import undefer
 from sqlalchemy.sql.expression import all_
 from web.auth import login
-from . import db
+from . import create_app, db
 from flask_login.utils import login_required
 from sqlalchemy.sql.functions import user
-from flask import Blueprint, render_template, flash, jsonify
-from flask.globals import request, session
+from flask import Blueprint, config, render_template, flash, jsonify
+from flask.globals import current_app, request, session
 from flask.helpers import url_for
 from werkzeug.utils import redirect, secure_filename
 from flask_login import login_required, current_user
-from .models import Note, User, Image, Draft
+from .models import Note, Tag, User, Image, Draft
 import web
+import pathlib
+
 
 views = Blueprint('views', __name__)
 home_bp = Blueprint('home_bp', __name__)
+
+
+
+
 
 @views.route('/home', methods=['POST', 'GET'])
 # @login_required
 def home():
     users_login = User.query.order_by(User.login).all()
-    tag_list = Note.query.order_by(Note.tag).all()
     if request.method == "POST":
         if 'username' in session:
             # username = session['username']
             note_title = request.form.get('title')
             note_data = request.form.get('note')
-            note_tag = request.form.get('tag')
+            unsorter_list_of_tags = request.form.get('tags')
+            sorter_list_of_tags = (unsorter_list_of_tags.split(','))
+            note_tag = sorter_list_of_tags
+            # note_tag = request.form.get('tags')
+            # return render_template('index.html', note_tag = note_tag)
             picture = request.files.getlist('picture')
 
             valid_title = Note.query.filter_by(title = note_title).first()
@@ -45,8 +54,7 @@ def home():
                 note_entrance = Note(
                 title =  note_title,
                 data = note_data, 
-                user_login = current_user.login, 
-                tag = note_tag)
+                user_login = current_user.login)
 
                 db.session.add(note_entrance)
                 db.session.commit()
@@ -54,22 +62,32 @@ def home():
                 if picture:
                     for each_picture in picture:
                         filename = secure_filename(each_picture.filename)
+
                         mimetype = each_picture.mimetype
                         note_image = Image(
-                        img = each_picture.read(),
-                        mimetype = mimetype,
-                        note_image = note_title,
-                        name = filename)
+                            img = each_picture.read(),
+                            mimetype = mimetype,
+                            note_image = note_title,
+                            name = filename)
 
                         db.session.add(note_image)
                         db.session.commit()
+                
+                if note_tag:
+                    for each_tag in note_tag:
+                        insert_to_db = Tag(
+                            tag_name = each_tag,
+                            note_tag = note_title)
+                        
+                        db.session.add(insert_to_db)
+                        db.session.commit()
+
 
         else:
             flash('Please login first ', category='error')
             return redirect(url_for('auth.login'))
 
     return render_template('home.html',
-    tag_list = tag_list,
     users_login = users_login,
     current_user = current_user)
 
@@ -78,19 +96,32 @@ def get_image(name):
     image = Image.query.filter_by(name = name).first()
     return Response (image.img, mimetype=image.mimetype)
 
-@views.route('/home/<post>', methods=['POST', 'GET'])
+@views.route('/home/<post>')
 def post(post):
     global article
     article = Note.query.filter_by(title = post).first()  
     # all_images = Image.query.order_by(Image.id).all()
     image = Image.query.filter_by(note_image = post).all()
+    tags = Tag.query.filter_by(note_tag = post).all()
     if article:
         return render_template('post.html', 
+        tags = tags,
         # all_images = all_images,
         image = image,
         article = article)
     else:
-        return 'this post does not exists... maybe... maybe it is just an another bug'
+        return 'this post does not exists'
+
+@views.route('/tags/<tag_name>')
+def tag(tag_name):
+    tag = Tag.query.filter_by(tag_name = tag_name).all()
+    title = tag_name
+    if tag:
+        return render_template('tag.html',
+        title = title,
+        tag = tag)
+    else:
+        return 'there is no association with this tag'
 
 @views.route('/user/<login>', methods=['POST', 'GET'])
 def user_page(login):
@@ -134,8 +165,16 @@ def user_draft(login):
 def delete_note(id):
     # user = User.query.filter_by(login = current_user.login).first()
     note_id = Note.query.filter_by(id = id).first()
+    note_image_dependencies = Image.query.filter_by(note_image = note_id.title).all()
+    note_tag_dependencies = Tag.query.filter_by(note_tag = note_id.title).all()
     if note_id:
         if note_id.user_login == current_user.login:
+            for single_image in note_image_dependencies:
+                db.session.delete(single_image)
+                db.session.commit()
+            for single_tag in note_tag_dependencies:
+                db.session.delete(single_tag)
+                db.session.commit()
             db.session.delete(note_id)
             db.session.commit()
             return redirect(url_for('views.home'))

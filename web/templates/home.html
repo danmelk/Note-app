@@ -10,53 +10,70 @@
  {% endif %}
 <h1>Posts</h1>
 {% for user in users_login %}
-{% for title in user.notes %}
+{% for note in user.notes %}
 
 <li class="list-group-item">
-  <a href="/home/{{ title.title }}">{{ title.title }}</a> Written by 
-  <a href="/user/{{ user.login }}">{{ user.login }}</a>
+  <a href="/home/{{ note.title }}">{{ note.title }}</a> Written by 
+  <a href="/user/{{ user.login }}">{{ user.login }}</a> Tags: {% for tag in note.tags %}
+  <a href="/tags/{{ tag.tag_name }}">{{ tag.tag_name }}</a>
+  {% endfor %}
 </li>
 {% endfor %} {% endfor %} <br>
 {% if current_user.is_authenticated %}
 
 <form method="POST" enctype="multipart/form-data">
-  <!-- <label for="title">Your title for current post: </label>
-  <input name="title" id="title"> -->
-
-  <!-- <label for="tag">Your tag for current post: </label>
-  <input name="tag" id="tag"> -->
-
-  <!-- <textarea name="note" id="note" class="form-control"></textarea> <br> -->
 
   <div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Head</label>
-    <input type="text" name="title" class="form-control" id="exampleFormControlInput1">
+    <label for="title" class="form-label">Head</label>
+    <input type="text" name="title" class="form-control" id="title">
   </div>
-  <div class="mb-3">
-    <label for="exampleFormControlTextarea1" class="form-label">Body</label>
-    <textarea class="form-control" name="note" id="exampleFormControlTextarea1" rows="1"></textarea>
-  </div>
-  <!-- <div>
-    <label for="formFileLg" class="form-label">File upload</label>
-    <input class="form-control form-control-lg" name="picture" id="formFileLg" type="file">
-  </div> -->
-  <div class="mb-3">
-    <label for="formFileMultiple" class="form-label">Multiple files input example</label>
-    <input class="form-control" name="picture" type="file" id="formFileMultiple" multiple>
-  </div>
-  <!-- <select class="form-select form-select-sm" name="tag" aria-label=".form-select-sm example">
-    {% for tag in tag_list %}
-      <option selected>{{tag.tag}}</option>
-    {% endfor %}
-  </select> -->
 
-  <br>
-  <br>
+  <div class="mb-3">
+    <label for="note" class="form-label">Body</label>
+    <textarea class="form-control" name="note" id="note" rows="2"></textarea>
+  </div>
 
+  <div class="mb-3">
+    <input type="text" name="tags" id="tags-text-field">
+  </div>
+
+  <div class="mb-3">
+    <label for="picture" class="form-label">Multiple files input example</label>
+    <input class="form-control" name="picture" type="file" id="picture" multiple>
+  </div>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.min.js" integrity="sha512-JiDSvppkBtWM1f9nPRajthdgTCZV3wtyngKUqVHlAs0d5q72n5zpM3QMOLmuNws2vkYmmLn4r1KfnPzgC/73Mw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.css" integrity="sha512-WJ1jnnij6g+LY1YfSmPDGxY0j2Cq/I6PPA7/s4QJ/5sRca5ypbHhFF+Nam0TGfvpacrw9F0OGeZa0ROdNAsaEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.js" integrity="sha512-C0BjK7lFIReZXZeIPdlW5lV1926j4hons+B5UQhSqWee3cCNx/AB0jUC+v3XGMRucvipU4LrO6n7j1SujSQKYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    $("#tags-text-field").selectize({
+      delimiter: ",",
+      persist: false,
+      placeholder: 'Add some tags to your post!',
+      create: function (input) {
+        return {
+          value: input,
+          text: input,
+        }
+      }
+    });
+  </script>
+  
+
+
+  <br><br>
   <button type="submit" class="btn btn-primary">Add Post</button> 
   <button type="submit" formaction='/{{ current_user.login }}/draft' class="btn btn-primary">Save as draft</button> 
 </form>
 
+{% if current_user.is_authenticated %}
+<a href="/{{current_user.login}}/draft">You also can check out your drafts</a>  
+{% else %}
+{% endif %}
 {% else %}
 {% endif %} 
 {% endblock %}

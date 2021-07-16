@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h3>"{{ title }}" tag references </h3>
+
+{% for each_tag in tag %}
+<li class="list-group-item">
+    <a href="/home/{{ each_tag.note_tag }}">{{ each_tag.note_tag }}</a> 
+</li>
+{% endfor %}
+{% endblock %}

@@ -18,11 +18,13 @@
 
 <h4>{{ article.data }}</h4>
 
-
+{% if image %}
 {% for each_image in image %}
-    <img src="image/{{each_image.name}}" class="rounded float-start">
+    <img src="/image/{{each_image.name}}" class="rounded float-start">
     <!-- {{ each_image.name }} -->
 {% endfor %}
+{% else %}
+{% endif %}
 
 
 <!-- <img src="image/{{image.name}}"></img> -->

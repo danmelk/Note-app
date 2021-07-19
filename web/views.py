@@ -26,9 +26,6 @@ views = Blueprint('views', __name__)
 home_bp = Blueprint('home_bp', __name__)
 
 
-
-
-
 @views.route('/home', methods=['POST', 'GET'])
 # @login_required
 def home():
@@ -100,15 +97,20 @@ def get_image(name):
 def post(post):
     global article
     article = Note.query.filter_by(title = post).first()  
-    # all_images = Image.query.order_by(Image.id).all()
     image = Image.query.filter_by(note_image = post).all()
     tags = Tag.query.filter_by(note_tag = post).all()
     if article:
-        return render_template('post.html', 
-        tags = tags,
-        # all_images = all_images,
-        image = image,
-        article = article)
+        if len(image) > 0:
+            return render_template('post.html', 
+            tags = tags,
+            image = image,
+            article = article)
+        elif len(image) < 0:
+            return render_template('post.html', 
+            tags = tags,
+            article = article)
+
+
     else:
         return 'this post does not exists'
 

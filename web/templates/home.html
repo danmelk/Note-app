@@ -1,14 +1,19 @@
 {% extends 'base.html' %}
-
 {% block header %}
+
   <h1>{% block title %}Home page{% endblock %}</h1>
-{% endblock %}
+
+  {% endblock %}
 {% block content %}
 {% if current_user.is_authenticated %}
- <h4>Welcome back, {{ current_user.name }}</h4>
+
+<h4>Welcome back, {{ current_user.name }}</h4>
+
  {% else %}
  {% endif %}
-<h1>Posts</h1>
+
+ <h1>Posts</h1>
+
 {% for user in users_login %}
 {% for note in user.notes %}
 
@@ -18,6 +23,7 @@
   <a href="/tags/{{ tag.tag_name }}">{{ tag.tag_name }}</a>
   {% endfor %}
 </li>
+
 {% endfor %} {% endfor %} <br>
 {% if current_user.is_authenticated %}
 

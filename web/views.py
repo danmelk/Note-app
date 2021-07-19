@@ -98,14 +98,22 @@ def post(post):
     global article
     article = Note.query.filter_by(title = post).first()  
     image = Image.query.filter_by(note_image = post).all()
+    print(image)
     tags = Tag.query.filter_by(note_tag = post).all()
     if article:
-        if len(image) > 0:
+        for each_image in image:
+            if each_image.img:
+                validator = True
+            else:
+                validator = False
+        if validator == True:
+            print('validator says True')
             return render_template('post.html', 
             tags = tags,
             image = image,
             article = article)
-        elif len(image) < 0:
+        else:
+            print('validator says its False!')
             return render_template('post.html', 
             tags = tags,
             article = article)

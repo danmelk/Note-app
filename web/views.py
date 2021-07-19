@@ -23,7 +23,6 @@ import pathlib
 
 
 views = Blueprint('views', __name__)
-home_bp = Blueprint('home_bp', __name__)
 
 
 @views.route('/home', methods=['POST', 'GET'])
@@ -93,7 +92,73 @@ def get_image(name):
     image = Image.query.filter_by(name = name).first()
     return Response (image.img, mimetype=image.mimetype)
 
-@views.route('/home/<post>')
+@views.route('/write', methods=['POST', 'GET'])
+@login_required
+def write_an_article():
+    users_login = User.query.order_by(User.login).all()
+    if request.method == "POST":
+        if 'username' in session:
+            # username = session['username']
+            note_title = request.form.get('title')
+            note_data = request.form.get('note')
+            unsorter_list_of_tags = request.form.get('tags')
+            sorter_list_of_tags = (unsorter_list_of_tags.split(','))
+            note_tag = sorter_list_of_tags
+            # note_tag = request.form.get('tags')
+            # return render_template('index.html', note_tag = note_tag)
+            picture = request.files.getlist('picture')
+
+            valid_title = Note.query.filter_by(title = note_title).first()
+            if valid_title:
+                flash('Wrong title', category='error')
+            elif len(note_data) < 1:
+                flash('Write something!', category='error')
+            else:
+                note_entrance = Note(
+                title =  note_title,
+                data = note_data, 
+                user_login = current_user.login)
+
+                db.session.add(note_entrance)
+                db.session.commit()
+
+                if picture:
+                    for each_picture in picture:
+                        filename = secure_filename(each_picture.filename)
+
+                        mimetype = each_picture.mimetype
+                        note_image = Image(
+                            img = each_picture.read(),
+                            mimetype = mimetype,
+                            note_image = note_title,
+                            name = filename)
+
+                        db.session.add(note_image)
+                        db.session.commit()
+                
+                if note_tag:
+                    for each_tag in note_tag:
+                        insert_to_db = Tag(
+                            tag_name = each_tag,
+                            note_tag = note_title)
+                        
+                        db.session.add(insert_to_db)
+                        db.session.commit()
+
+
+                    return redirect(url_for('views.home'))
+
+
+
+        else:
+            flash('Please login first ', category='error')
+            return redirect(url_for('auth.login'))
+
+    return render_template('write_note.html',
+    users_login = users_login,
+    current_user = current_user)
+
+@views.route('/home/<post>', methods=['POST', 'GET'])
 def post(post):
     global article
     article = Note.query.filter_by(title = post).first()  
@@ -108,7 +173,7 @@ def post(post):
                 validator = False
         if validator == True:
             print('validator says True')
-            return render_template('post.html', 
+            return render_template('post.html',
             tags = tags,
             image = image,
             article = article)
@@ -117,10 +182,9 @@ def post(post):
             return render_template('post.html', 
             tags = tags,
             article = article)
-
-
     else:
         return 'this post does not exists'
+
 
 @views.route('/tags/<tag_name>')
 def tag(tag_name):

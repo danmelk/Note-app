@@ -36,6 +36,7 @@
         {% if current_user.is_authenticated %}
         <a class="navbar-brand" href="{{ url_for('auth.logout')}}">Logout</a>
         <a class="navbar-brand" href="{{ url_for('views.home')}}">Home page</a>
+        <a class="navbar-brand" href="{{ url_for('views.write_an_article')}}">Write a post</a>
         {% else %}
         <a class="navbar-brand" href="{{ url_for('views.home')}}">Home page</a>
         <a class="navbar-brand" href="{{ url_for('auth.sign_up')}}">Sign-up</a>

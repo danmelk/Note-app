@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block header %}
+
+  <h1>{% block title %}Home page{% endblock %}</h1>
+
+  {% endblock %}
+{% block content %}
+{% if current_user.is_authenticated %}
+
+<form method="POST" enctype="multipart/form-data">
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Head</label>
+      <input type="text" name="title" class="form-control" id="title">
+    </div>
+  
+    <div class="mb-3">
+      <label for="note" class="form-label">Body</label>
+      <textarea class="form-control" name="note" id="note" rows="2"></textarea>
+    </div>
+  
+    <div class="mb-3">
+      <input type="text" name="tags" id="tags-text-field">
+    </div>
+  
+    <div class="mb-3">
+      <label for="picture" class="form-label">Multiple files input example</label>
+      <input class="form-control" name="picture" type="file" id="picture" multiple>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.min.js" integrity="sha512-JiDSvppkBtWM1f9nPRajthdgTCZV3wtyngKUqVHlAs0d5q72n5zpM3QMOLmuNws2vkYmmLn4r1KfnPzgC/73Mw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.css" integrity="sha512-WJ1jnnij6g+LY1YfSmPDGxY0j2Cq/I6PPA7/s4QJ/5sRca5ypbHhFF+Nam0TGfvpacrw9F0OGeZa0ROdNAsaEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.js" integrity="sha512-C0BjK7lFIReZXZeIPdlW5lV1926j4hons+B5UQhSqWee3cCNx/AB0jUC+v3XGMRucvipU4LrO6n7j1SujSQKYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+    <script>
+      $("#tags-text-field").selectize({
+        delimiter: ",",
+        persist: false,
+        placeholder: 'Add some tags to your post!',
+        create: function (input) {
+          return {
+            value: input,
+            text: input,
+          }
+        }
+      });
+    </script>
+    
+    <br><br>
+    <button type="submit" class="btn btn-primary">Add Post</button> 
+    <button type="submit" formaction='/{{ current_user.login }}/draft' class="btn btn-primary">Save as draft</button> 
+  </form>
+  {% endif %}
+  {% endblock %}

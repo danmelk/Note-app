@@ -12,7 +12,7 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/')
 def redirect_to_login():
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('views.home'))
 
 @auth.route('/login', methods=['POST', 'GET'])
 def login():

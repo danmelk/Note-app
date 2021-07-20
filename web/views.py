@@ -84,6 +84,7 @@ def home():
             return redirect(url_for('auth.login'))
 
     return render_template('home.html',
+    
     users_login = users_login,
     current_user = current_user)
 

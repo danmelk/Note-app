@@ -30,7 +30,10 @@
         <h4><a href="/home/{{ note.title }}"><b>{{ note.title }}</b></a>
         {% with text = note.data %}
         {% if text |length > 100 %}
-        <h5>{{ text[0:100] }}...<a href="/home/{{ note.title }}">Read full text</a></h5>
+        <h5>{{ text[0:100] }}...<a href="/home/{{ note.title }}">read full text</a></h5>
+        {% else %}
+        <h5>{{ text[0:100] }}</h5>
+
         {% endif %}
         {% endwith %}
       </p>
@@ -38,7 +41,6 @@
   </div>
 </div>
 <hr>
-
 
 
 {% endfor %} {% endfor %} <br>

@@ -29,10 +29,10 @@
         <a href="/tags/{{ tag.tag_name }}">{{ tag.tag_name }}</a>{% endfor %}</span>
       <hr>
       <p>
-        <h4><a href="/home/{{ note.title }}"><b>{{ note.title }}</b></a>
+        <h4><a href="/home/{{ note.note_url }}"><b>{{ note.title }}</b></a>
         {% with text = note.data %}
         {% if text |length > 100 %}
-        <h5>{{ text[0:100] }}...<a href="/home/{{ note.title }}">read full text</a></h5>
+        <h5>{{ text[0:100] }}...<a href="/home/{{ note.note_url }}">read full text</a></h5>
         {% else %}
         <h5>{{ text[0:100] }}</h5>
         {% endif %}

@@ -32,6 +32,7 @@ class Note(db.Model):
     title = db.Column(db.String(100), unique = True)
     data = db.Column(db.String(5000))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    note_url = db.Column(db.String(200), unique = True)
     user_login = db.Column(db.String, db.ForeignKey('user.login'))
     images = db.relationship('Image')
     tags = db.relationship('Tag')

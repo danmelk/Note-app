@@ -15,7 +15,7 @@ from sqlalchemy.sql.functions import user
 from flask import Blueprint, config, render_template, flash, jsonify
 from flask.globals import current_app, request, session
 from flask.helpers import url_for
-from werkzeug.utils import redirect, secure_filename
+from werkzeug.utils import escape, redirect, secure_filename
 from flask_login import login_required, current_user
 from .models import Note, Tag, User, Image, Draft
 import web
@@ -115,7 +115,16 @@ def write_an_article():
             elif len(note_data) < 1:
                 flash('Write something!', category='error')
             else:
+                
+                for symbol in note_title.split("\n"):
+                    url = (re.sub(r"[^a-zA-Z0-9]+", ' ', symbol))
+                print(url)
+                post_url = '-'.join(url.split())
+                print(post_url)
+                correct_post_url = post_url.lower()
+                print(correct_post_url)
                 note_entrance = Note(
+                note_url = correct_post_url,
                 title =  note_title,
                 data = note_data, 
                 user_login = current_user.login)
@@ -166,29 +175,23 @@ def write_an_article():
 @views.route('/home/<post>', methods=['POST', 'GET'])
 def post(post):
     global article
-    article = Note.query.filter_by(title = post).first()  
-    image = Image.query.filter_by(note_image = post).all()
-    print(image)
-    tags = Tag.query.filter_by(note_tag = post).all()
+    article = Note.query.filter_by(note_url = post).first()  
+    image = Image.query.filter_by(note_image = article.title).all()
+    tags = Tag.query.filter_by(note_tag = article.title).all()
     if article:
         for each_image in image:
             if each_image.img:
-                validator = True
+                return render_template('post.html',
+                tags = tags,
+                image = image,
+                article = article)
             else:
-                validator = False
-        if validator == True:
-            print('validator says True')
-            return render_template('post.html',
-            tags = tags,
-            image = image,
-            article = article)
-        else:
-            print('validator says its False!')
-            return render_template('post.html', 
-            tags = tags,
-            article = article)
+                return render_template('post.html', 
+                tags = tags,
+                article = article)
     else:
-        return 'this post does not exists'
+        flash('Post does not exists', category='error')
+        return redirect(url_for('views.home'))
 
 
 @views.route('/tags/<tag_name>')
@@ -200,7 +203,8 @@ def tag(tag_name):
         title = title,
         tag = tag)
     else:
-        return 'there is no association with this tag'
+        flash('there is no association with this tag', category='error')
+        return redirect(url_for('views.home'))
 
 @views.route('/user/<login>', methods=['POST', 'GET'])
 def user_page(login):
@@ -209,7 +213,8 @@ def user_page(login):
         return render_template('user_page.html', 
         user_login = user_login)
     else:
-        return 'this user does not exists. '
+        flash('User does not exists', category='error')
+        return redirect(url_for('views.home'))
 
 @views.route('<login>/draft', methods=['POST', 'GET'])
 @login_required

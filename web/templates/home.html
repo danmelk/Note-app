@@ -7,7 +7,7 @@
 {% block content %}
 {% if current_user.is_authenticated %}
 
-<h4>Welcome back, {{ current_user.name }}</h4>
+<h4><b>Welcome back, <i>{{ current_user.name }}</i></b></h4>
 
  {% else %}
  {% endif %}
@@ -16,6 +16,8 @@
 
 {% for user in users_login %}
 {% for note in user.notes %}
+
+
 
 <div class="card">
   <div class="card-body">

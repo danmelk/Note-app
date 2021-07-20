@@ -21,7 +21,6 @@ from .models import Note, Tag, User, Image, Draft
 import web
 import pathlib
 
-
 views = Blueprint('views', __name__)
 
 
@@ -97,6 +96,7 @@ def get_image(name):
 @login_required
 def write_an_article():
     users_login = User.query.order_by(User.login).all()
+    tags = Tag.query.order_by(Tag.note_tag).all()
     if request.method == "POST":
         if 'username' in session:
             # username = session['username']
@@ -154,8 +154,12 @@ def write_an_article():
         else:
             flash('Please login first ', category='error')
             return redirect(url_for('auth.login'))
-
+    tag_list = []
+    for each_tag in tags:
+        tag_list.append(each_tag.tag_name)
+    print(tag_list)
     return render_template('write_note.html',
+    tags = json.dumps(tag_list),
     users_login = users_login,
     current_user = current_user)
 

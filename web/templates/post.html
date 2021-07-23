@@ -3,7 +3,6 @@
 
 <h2>{{ article.title }}</h2> <br>
 
-<!-- {% if current_user.is_authenticated %} -->
 {% if current_user.login == article.user_login or current_user.login == 'validator-9000'%}
 
 <form method="POST">
@@ -13,7 +12,6 @@
 
 {% else %} 
 {% endif %} 
-{% endif %}
 
 <h4>{{ article.data }}</h4>
 

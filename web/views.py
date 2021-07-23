@@ -7,7 +7,7 @@ from flask.wrappers import Response
 import imghdr
 from sqlalchemy import util
 from sqlalchemy.orm import undefer
-from sqlalchemy.sql.expression import all_
+from sqlalchemy.sql.expression import all_, select
 from web.auth import login
 from . import create_app, db
 from flask_login.utils import login_required
@@ -25,65 +25,24 @@ views = Blueprint('views', __name__)
 
 
 @views.route('/home', methods=['POST', 'GET'])
-# @login_required
 def home():
+    tags = Tag.query.order_by(Tag.note_tag).all()
     users_login = User.query.order_by(User.login).all()
-    if request.method == "POST":
-        if 'username' in session:
-            # username = session['username']
-            note_title = request.form.get('title')
-            note_data = request.form.get('note')
-            unsorter_list_of_tags = request.form.get('tags')
-            sorter_list_of_tags = (unsorter_list_of_tags.split(','))
-            note_tag = sorter_list_of_tags
-            # note_tag = request.form.get('tags')
-            # return render_template('index.html', note_tag = note_tag)
-            picture = request.files.getlist('picture')
+    unsorted_search_by_tag = request.form.get('tagSearch')
 
-            valid_title = Note.query.filter_by(title = note_title).first()
-            if valid_title:
-                flash('Wrong title', category='error')
-            elif len(note_data) < 1:
-                flash('Write something!', category='error')
-            else:
-                note_entrance = Note(
-                title =  note_title,
-                data = note_data, 
-                user_login = current_user.login)
-
-                db.session.add(note_entrance)
-                db.session.commit()
-
-                if picture:
-                    for each_picture in picture:
-                        filename = secure_filename(each_picture.filename)
-
-                        mimetype = each_picture.mimetype
-                        note_image = Image(
-                            img = each_picture.read(),
-                            mimetype = mimetype,
-                            note_image = note_title,
-                            name = filename)
-
-                        db.session.add(note_image)
-                        db.session.commit()
-                
-                if note_tag:
-                    for each_tag in note_tag:
-                        insert_to_db = Tag(
-                            tag_name = each_tag,
-                            note_tag = note_title)
-                        
-                        db.session.add(insert_to_db)
-                        db.session.commit()
-
-
-        else:
-            flash('Please login first ', category='error')
-            return redirect(url_for('auth.login'))
+    tag_list = []
+    for each_tag in tags:
+        tag_list.append(each_tag.tag_name)
+    if unsorted_search_by_tag:
+        sorted_search_by_tag = (unsorted_search_by_tag.split(','))
+        search_by_tag = sorted_search_by_tag
+        for searched_tag in search_by_tag:
+            searched_tag = Tag.query.filter_by(tag_name = searched_tag).all()
+            for each_found_tag in searched_tag:
+                print('selected tags ==', each_found_tag.tag_name, 'relation to note:', each_found_tag.note_tag)
 
     return render_template('home.html',
-    
+    tags = json.dumps(tag_list),
     users_login = users_login,
     current_user = current_user)
 
@@ -99,16 +58,12 @@ def write_an_article():
     tags = Tag.query.order_by(Tag.note_tag).all()
     if request.method == "POST":
         if 'username' in session:
-            # username = session['username']
             note_title = request.form.get('title')
             note_data = request.form.get('note')
             unsorter_list_of_tags = request.form.get('tags')
             sorter_list_of_tags = (unsorter_list_of_tags.split(','))
             note_tag = sorter_list_of_tags
-            # note_tag = request.form.get('tags')
-            # return render_template('index.html', note_tag = note_tag)
             picture = request.files.getlist('picture')
-
             valid_title = Note.query.filter_by(title = note_title).first()
             if valid_title:
                 flash('Wrong title', category='error')
@@ -117,7 +72,7 @@ def write_an_article():
             else:
                 
                 for symbol in note_title.split("\n"):
-                    url = (re.sub(r"[^a-zA-Z0-9]+", ' ', symbol))
+                    url = (re.sub(r'[><?|#;№\!@#$%:"^&*()+_-]+', ' ', symbol))
                 print(url)
                 post_url = '-'.join(url.split())
                 print(post_url)
@@ -149,6 +104,7 @@ def write_an_article():
                 if note_tag:
                     for each_tag in note_tag:
                         insert_to_db = Tag(
+                            note_tag_url = correct_post_url,
                             tag_name = each_tag,
                             note_tag = note_title)
                         
@@ -192,7 +148,6 @@ def post(post):
     else:
         flash('Post does not exists', category='error')
         return redirect(url_for('views.home'))
-
 
 @views.route('/tags/<tag_name>')
 def tag(tag_name):

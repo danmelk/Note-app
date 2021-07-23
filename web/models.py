@@ -12,7 +12,8 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String(100))
     note_tag = db.Column(db.String, db.ForeignKey('note.title'))
-
+    note_tag_url = db.Column(db.String, db.ForeignKey('note.note_url'))
+    
 class Draft(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(100), unique = True)
@@ -35,7 +36,8 @@ class Note(db.Model):
     note_url = db.Column(db.String(200), unique = True)
     user_login = db.Column(db.String, db.ForeignKey('user.login'))
     images = db.relationship('Image')
-    tags = db.relationship('Tag')
+    tags = db.relationship('Tag', foreign_keys = [Tag.note_tag])
+    tags_url = db.relationship('Tag', foreign_keys = [Tag.note_tag_url])
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)

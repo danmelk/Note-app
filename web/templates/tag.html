@@ -7,7 +7,9 @@
 
 {% for each_tag in tag %}
 <li class="list-group-item">
-    <a href="/home/{{ each_tag.note_tag }}">{{ each_tag.note_tag }}</a> 
+    <a href="/home/{{ each_tag.note_tag_url }}">{{ each_tag.note_tag }}</a> 
 </li>
+<hr>
+
 {% endfor %}
 {% endblock %}

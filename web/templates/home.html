@@ -1,22 +1,56 @@
 {% extends 'base.html' %}
 {% block header %}
 
+
   <h1>{% block title %}Home page{% endblock %}</h1>
 
   {% endblock %}
 {% block content %}
 {% if current_user.is_authenticated %}
 
-<h4><b>Welcome back, <i>{{ current_user.name }}</i></b></h4>
-
  {% else %}
  {% endif %}
 
  <h1>Posts</h1>
+<hr>
+<form action="/home" method="POST">
+  <div class="input-group col-md-4">
+    <input type="search" id="tagSearching" name="tagSearch" class="form-control rounded" placeholder="Search by tag" aria-label="Search"
+      aria-describedby="search-addon" />
+    <button type="submit" class="btn btn-outline-primary">Dive in</button>
+  </div>
+</form>
+<hr>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.min.js" integrity="sha512-JiDSvppkBtWM1f9nPRajthdgTCZV3wtyngKUqVHlAs0d5q72n5zpM3QMOLmuNws2vkYmmLn4r1KfnPzgC/73Mw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.css" integrity="sha512-WJ1jnnij6g+LY1YfSmPDGxY0j2Cq/I6PPA7/s4QJ/5sRca5ypbHhFF+Nam0TGfvpacrw9F0OGeZa0ROdNAsaEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/selectize.js" integrity="sha512-C0BjK7lFIReZXZeIPdlW5lV1926j4hons+B5UQhSqWee3cCNx/AB0jUC+v3XGMRucvipU4LrO6n7j1SujSQKYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script type="text/javascript">
+  var tags = JSON.parse('{{ tags|safe }}')
+  var item_tags = tags.map(function(x) { return { item: x }; });
+
+  $("#tagSearching").selectize({
+    delimiter: ",",
+    persist: false,
+    placeholder: 'Searching by tags',
+    options: item_tags,
+    labelField: "item",
+    valueField: "item",
+    sortField: 'item',
+    searchField: 'item',
+    create: false,
+    openOnFocus: false,
+    }
+  );
+</script>
+
 
 {% for user in users_login %}
 {% for note in user.notes %}
-
 
 
 <div class="card">

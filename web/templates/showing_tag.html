@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h2>
+    {% for each_tag in search_by_tag %}
+    {{ each_tag }}
+    {% endfor %}
+</h2>
+
+</h5>
+{% for each_found_tag_in_list in searched_tag_list %}
+{% for each_tag in each_found_tag_in_list %}
+<li class="list-group-item">
+    <a href="/home/{{ each_tag.note_tag_url }}">{{ each_tag.note_tag }}</a> 
+</li>
+{% endfor %}
+{% endfor %}
+  <hr>
+
+{% endblock %}

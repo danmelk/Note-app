@@ -36,11 +36,22 @@ def home():
     if unsorted_search_by_tag:
         sorted_search_by_tag = (unsorted_search_by_tag.split(','))
         search_by_tag = sorted_search_by_tag
+        print('search by tag:', search_by_tag)
+
+        searched_tag_list = []
         for searched_tag in search_by_tag:
             searched_tag = Tag.query.filter_by(tag_name = searched_tag).all()
-            for each_found_tag in searched_tag:
-                print('selected tags ==', each_found_tag.tag_name, 'relation to note:', each_found_tag.note_tag)
+            searched_tag_list.append(searched_tag)
+        print('searched list of tags:', searched_tag_list)
+        for each_found_tag_in_list in searched_tag_list:
+            for each_tag in each_found_tag_in_list:
+                print('each found tag in list:', each_found_tag_in_list)
+        return render_template('showing_tag.html',
+            search_by_tag = search_by_tag,
+            searched_tag_list = searched_tag_list)
 
+    else:
+        print('nothing selected')
     return render_template('home.html',
     tags = json.dumps(tag_list),
     users_login = users_login,

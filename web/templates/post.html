@@ -3,7 +3,7 @@
 
 <h2>{{ article.title }}</h2> <br>
 
-{% if current_user.login == article.user_login or current_user.login == 'validator-9000'%}
+{% if current_user.login == article.user_login%}
 
 <form method="POST">
     <button type="submit" formaction='/delete_note/{{ article.id }}' class="btn btn-primary">Delete post</button> 
@@ -11,6 +11,16 @@
 </form> <br>
 
 {% else %} 
+
+<form method="POST">
+    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+        <input class="btn btn-primary" type="button" value="Delete post" />
+     </a>
+     <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+        <input class="btn btn-primary" type="button" value="Edit post" />
+     </a>
+</form> <br>
+
 {% endif %} 
 
 <h4>{{ article.data }}</h4>

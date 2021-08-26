@@ -3,11 +3,6 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-# tags = db.Table('tags',
-#     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True),
-#     db.Column('page_id', db.Integer, db.ForeignKey('note.id'), primary_key=True)
-# )
-
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String(100))
@@ -44,5 +39,6 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(50))
     login = db.Column(db.String(50), unique = True)
     password = db.Column(db.String(50))
+    ip_addr = db.Column(db.String(100))
     notes = db.relationship('Note')
     drafts = db.relationship('Draft')

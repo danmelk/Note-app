@@ -65,7 +65,8 @@ def sign_up():
         elif len(password_data) < 6:
             flash('your password must be greater then 5 characters', category='error')
         else:
-            new_user = User(name = name_data, login = login_data, password = password_data)
+            get_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+            new_user = User(name = name_data, login = login_data, password = password_data, ip_addr = get_ip)
             db.session.add(new_user)
             db.session.commit()
             flash('Account created successfully, follow to login page to login', category='success')

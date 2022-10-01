@@ -14,7 +14,7 @@ def create_app():
     app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
     app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
     app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_DATABASE_URI")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 

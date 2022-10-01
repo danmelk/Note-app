@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_manager
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
-load_dotenv()
+# load_dotenv()
 
 db = SQLAlchemy()
 

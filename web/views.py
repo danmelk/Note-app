@@ -1,8 +1,5 @@
-from logging import log
-from operator import attrgetter, imatmul, irshift, pos
 import json
 import re
-from types import MethodDescriptorType
 from flask.wrappers import Response
 import imghdr
 from sqlalchemy import util
@@ -18,8 +15,6 @@ from flask.helpers import url_for
 from werkzeug.utils import escape, redirect, secure_filename
 from flask_login import login_required, current_user
 from .models import Note, Tag, User, Image, Draft
-import web
-import pathlib
 
 views = Blueprint('views', __name__)
 
@@ -258,11 +253,6 @@ def update_note(id):
                 db.session.commit()
                 flash('changes applied', category='success')
                 return redirect(url_for('views.home'))
-                # return render_template('updated_post.html', 
-                # unedited_note = unedited_note, 
-                # edited_note = edited_note,
-                # article = article, 
-                # filter_by_id = filter_by_id)
 
         else:
             return 'you are not author for doing this!'

@@ -4,4 +4,4 @@ flask-login
 gunicorn 
 psycopg2
 pytest
-python-loadenv
+python-dotenv

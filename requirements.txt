@@ -3,6 +3,4 @@ flask-sqlalchemy
 flask-login
 gunicorn 
 psycopg2
-flask_sqlalchemy
-flask_login
 pytest
